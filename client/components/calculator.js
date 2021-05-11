@@ -17,10 +17,10 @@ const Calculator = () => {
     [7, 8, 9, 'X'],
     [4, 5, 6, '-'],
     [1, 2, 3, '+'],
-    [0, '.', '=', logo],
+    [0, '.', '=', logo]
   ]
 
-  const handleClick = (event) => {
+  const handleClick = event => {
     const target = event.target.value
     if (target === 'X' || target === '+' || target === '-' || target === '÷') {
       setCurrentDisplay((currentDisplay += ' ' + event.target.value + ' '))
@@ -49,8 +49,8 @@ const Calculator = () => {
               />
             </td>
           </tr>
-          {symbols.map((array) => {
-            const row = array.map((symbol) => {
+          {symbols.map(array => {
+            const row = array.map(symbol => {
               if (symbol === logo) {
                 return <td key={logo}>{symbol}</td>
               }
