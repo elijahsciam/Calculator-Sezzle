@@ -1,8 +1,11 @@
 import React, {useState, useEffect} from 'react'
 // import Display, {mathify} from './display'
-import RPN from './RPN'
+import RPNCalculator from './RPN'
+const RPN = new RPNCalculator([])
+
 const Calculator = () => {
   let [currentDisplay, setCurrentDisplay] = useState('')
+  let [currentOperator, setCurrentOperator] = useState()
   let [results, setResults] = useState() //add them to database when setResults
 
   const logo = (
@@ -17,22 +20,29 @@ const Calculator = () => {
     [7, 8, 9, 'X'],
     [4, 5, 6, '-'],
     [1, 2, 3, '+'],
-    [0, '.', '=', logo]
-  ]
+    [0, '.', '=', logo],
+  ] //refactor this to have functions as variables? maybe make things more DRY in handleClick??
 
-  const handleClick = event => {
+  const handleClick = (event) => {
     const target = event.target.value
-    setCurrentDisplay((currentDisplay += target))
-    if (target === '+') {
-      RPN.push(currentDisplay)
+    if (target === '+' || target === '-' || target === 'X' || target === '÷') {
+      RPN.push(Number(currentDisplay))
+      setCurrentOperator(target)
       setCurrentDisplay('')
-      }
+    } else if (target === '=') {
+      RPN.push(Number(currentDisplay))
+      console.log(RPN.numStack)
+      setCurrentDisplay(RPN[currentOperator]())
+      setCurrentOperator('')
+    } else if (target === 'AC') {
+      setCurrentOperator('')
+      setCurrentDisplay('')
+      RPN.clear()
+    } else {
+      setCurrentDisplay((currentDisplay += target))
     }
   }
 
-  // useEffect(() => {
-  //   console.log('idk')
-  // }, [currentCalc])
   return (
     <div>
       <form name="calculator">
@@ -47,8 +57,8 @@ const Calculator = () => {
               />
             </td>
           </tr>
-          {symbols.map(array => {
-            const row = array.map(symbol => {
+          {symbols.map((array) => {
+            const row = array.map((symbol) => {
               if (symbol === logo) {
                 return <td key={logo}>{symbol}</td>
               }

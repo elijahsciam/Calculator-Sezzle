@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars, no-throw-literal*/
+import axios from 'axios'
 
 class RPNCalculator {
   constructor() {
@@ -15,24 +16,28 @@ class RPNCalculator {
       const num1 = this.numStack.pop();
       const num2 = this.numStack.pop();
 
-      this.push(operationFunc(num1, num2));
+      return operationFunc(num1, num2)
     }
   }
-  plus() {
-    this.popCompute((first, second) => first + second);
+  '+'() {
+    return this.popCompute((first, second) => first + second);
   }
-  minus() {
-    this.popCompute((first, second) => second - first);
+  '-'() {
+    return this.popCompute((first, second) => second - first);
   }
-  times() {
-    this.popCompute((first, second) => second * first);
+  'X'() {
+    return this.popCompute((first, second) => second * first);
   }
-  divide() {
-    this.popCompute((first, second) => second / first);
+  '÷'() {
+    return this.popCompute((first, second) => second / first);
   }
   value() {
     return this.numStack[this.numStack.length - 1];
   }
+  clear() {
+    this.numStack =[]
+  }
 }
 
 export default RPNCalculator
+
