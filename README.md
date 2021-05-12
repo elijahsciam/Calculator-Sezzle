@@ -1,1 +1,1 @@
-#Elijah Sciammas Calculator Take Home Test from Sezzle, Inc.
+# Elijah Sciammas Calculator Take Home Test from Sezzle, Inc.
