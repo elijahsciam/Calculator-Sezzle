@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 // import Display, {mathify} from './display'
-
+import RPN from './RPN'
 const Calculator = () => {
   let [currentDisplay, setCurrentDisplay] = useState('')
   let [results, setResults] = useState() //add them to database when setResults
@@ -22,13 +22,11 @@ const Calculator = () => {
 
   const handleClick = event => {
     const target = event.target.value
-    if (target === 'X' || target === '+' || target === '-' || target === '÷') {
-      setCurrentDisplay((currentDisplay += ' ' + event.target.value + ' '))
-    } else if (target === '=') {
-    } else if (target === 'AC') {
+    setCurrentDisplay((currentDisplay += target))
+    if (target === '+') {
+      RPN.push(currentDisplay)
       setCurrentDisplay('')
-    } else {
-      setCurrentDisplay((currentDisplay += event.target.value))
+      }
     }
   }
 
