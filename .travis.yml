@@ -15,13 +15,15 @@ install:
 before_script:
   - psql -c 'create database "calculator-test";' -U postgres # remember to change this name if you change it elsewhere (e.g. package.json)
 script:
-  - npm test # test the code
   - npm run build-client # make the bundle
-# before_deploy:
-#   - rm -rf node_modules # omit from the tarball, since we skip cleanup
-# deploy:
-#   skip_cleanup: true # prevents travis from deleting the build
-#   provider: heroku
-#   app: YOUR-HEROKU-APP-NAME-HERE # see README
-#   api_key:
-#     secure: YOUR-***ENCRYPTED***-API-KEY-HERE # see README
+before_deploy: # omit node_modules, since we set skip_cleanup below
+  - rm -rf node_modules
+deploy: # see README for details on these keys
+  # prevents travis from deleting the build
+  skip_cleanup: true
+  provider: heroku
+  # app should be your heroku app name; see README
+  app: elijah-sciammas-calculator
+  # the secure key indicates an encrypted value; see README
+  api_key:
+    secure: ZoPBtbYfM1FxMZjvnay75GeSsdvGJLiUOk2DeuxzcoYvmO+16ULIiFOdO/xT23dqoMWBTlsMJR/ymzmgcIUX1IdHROQbcoaLmYCYQpVcWxfxOE8zCnJNZs8cStFxmF5EhDVYPWbAWhAaADKRcXxZHAijSNvHe0KAX7gWvhGREd7/68I0kf3ds/vxK+XaXhNatp5oKibhIaAT0ZMMTX8i9Siy37ZVPSxsRKq9L/+CJJtnDMmRMvjPhFqLH9u5Jq1U8JrpXThG/fNi744q5g/GZB2Kb644SMb+uJYZiPOq4EPiSbz1M2Dhm1r1Kk4k1EGHNNywZqmZkftbsfEkaZvDm0z8g7enQ72s0mJv0yUomAEMyQo3fetgL/y7BUjaGQsVgLsKPbHDB6fU2nBLTAMC8EPTJqf8hfEEYX1Bj9wttb4349BG5YY92EQ7kb0GlDIsYicEA4PTOT/F/Lpu7XeNZyqNBXkFJDYMotH0HXOh6haavIB/CHlqaUJmnl6o2pWYC4Cy843Qx+b5X1v71oFseuvs9xJcM8ztt93RXlGo54bIxMfsh4L3COpUpbzoujBILSUx8Ty6SK88PhMXxA71PjLDVZP4BxbMBol0/aZJntSoxiHRHLU5aoZ5mXS4iRsHDZzmDQJijNAUSnYvv8VD/H3+K2QkuIkGLueP0e882V0=
