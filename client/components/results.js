@@ -13,10 +13,13 @@ const Results = (props) => {
     <div>
       <List component='results'>
      {props.results ? props.results.map((result) => {
+       if (props.results.indexOf(result) < props.results.length - 10) {
+         return;
+       }
        return <Fade key={result} in={true}><ListItem key={result}>
          <ListItemText primary={result} />
        </ListItem></Fade>
-     }) : <p>Nothing yet!</p>}
+     }).reverse() : <p>Nothing yet!</p>}
      </List>
     </div>
   )
