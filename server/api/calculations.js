@@ -11,4 +11,13 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.post('/')
+router.post('/', async (req, res, next) => {
+  try {
+    const newCalc = await Calculations.create({
+      equation: req.body.equation
+    })
+    res.send(newCalc)
+  } catch (err) {
+    next(err)
+  }
+})
