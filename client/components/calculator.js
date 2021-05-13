@@ -14,6 +14,7 @@ const Calculator = () => {
   let [currentDisplay, setCurrentDisplay] = useState('')
   let [currentOperator, setCurrentOperator] = useState()
   let [results, setResults] = useState()
+  let [calculations, setCalculations] = useState()
   let count = 0
   const logo = (
     <img
@@ -28,13 +29,31 @@ const Calculator = () => {
     [4, 5, 6, '-'],
     [1, 2, 3, '+'],
     [0, '.', '=', logo],
-  ] //refactor this to have functions as variables? maybe make things more DRY in handleClick??
+  ]
 
   async function set(equation) {
     await axios.post('/api/calculations', {equation: equation})
   }
-  const sock = (eq) => {
-    if (eq) socket.emit('new-equation', eq)
+
+  const reverseMap = (array) => {
+    let timer = 0
+    let result = []
+    let i = array.length - 1
+    while (timer < 10) {
+      if (array[i] === undefined) {
+        break
+      }
+      result.push(array[i])
+      timer++
+      i--
+    }
+    return result
+  }
+
+  const sock = (res) => {
+    if (res) {
+      socket.emit('new-equation', res)
+    }
   }
 
   const handleClick = (event) => {
@@ -48,9 +67,9 @@ const Calculator = () => {
       setCurrentDisplay(RPN[currentOperator]())
       set(RPN.equation[RPN.equation.length - 1])
       results.push(RPN.equation[RPN.equation.length - 1])
+      count++
       sock(results)
       setCurrentOperator('')
-      count++
     } else if (target === ':)' || target === '(:') {
       console.log('gotcha!')
     } else {
@@ -69,7 +88,8 @@ const Calculator = () => {
       const data = getter.data.map((val) => {
         return val.equation
       })
-      setResults((results = data))
+      setCalculations((calculations = reverseMap(data)))
+      setResults((results = reverseMap(data)))
     }
     fetch()
   }, [])
@@ -123,7 +143,12 @@ const Calculator = () => {
         </form>
         <div id="results">
           <h4 style={{color: 'lavender'}}>Calculations</h4>
-          <Results results={results} setResults={setResults} count={count} />
+          <Results
+            calculations={calculations}
+            setCalculations={setCalculations}
+            count={count}
+            reverseMap={reverseMap}
+          />
         </div>
       </div>
       <Welcome />

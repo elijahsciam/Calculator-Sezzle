@@ -4,8 +4,8 @@ module.exports = io => {
   io.on('connection', socket => {
     console.log(`A socket connection to the server has been made: ${socket.id}`)
 
-    socket.on('new-equation', (eq) => {
-      io.emit('equation', eq)
+    socket.on('new-equation', (res) => {
+      io.emit('update-results', res)
     })
 
     socket.on('disconnect', () => {

@@ -11,22 +11,28 @@ const socket = io(window.location.origin)
 
 
 const Results = (props) => {
+
   useEffect(() => {
-    socket.on('equation', res => {
-      props.setResults(res)
+    socket.on('update-results', res => {
+      if (res.length > 10) {
+        res = res.slice(res.length - 10, res.length - 1)
+      }
+      console.log(res)
+      props.setCalculations(res)
     })
   }, [props.count])
+
+  // if (props.results) {
+  //   var reversedResults = reverseMap(props.results)
+  // }
+
   return (
     <div>
       <List component='ul' dense={true} className='listy'>
-     {props.results ? props.results.map((result) => {
-       if (props.results.indexOf(result) >= props.results.length - 10) {
+     {props.calculations ? props.calculations.map((result) => {
        return <Fade key={result} in={true}><ListItem key={result}>
          <ListItemText primary={result} />
        </ListItem></Fade>
-     } else {
-       console.log('filtered result')
-     }
     }).reverse()
      : <p>Nothing yet!</p>}
      </List>
