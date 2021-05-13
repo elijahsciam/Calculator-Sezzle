@@ -11,7 +11,7 @@ const Calculator = () => {
   let [currentDisplay, setCurrentDisplay] = useState('')
   let [currentOperator, setCurrentOperator] = useState()
   let [results, setResults] = useState()
-
+  let count = 0
   const logo = (
     <img
       src="http://www.logo-designer.co/wp-content/uploads/2020/03/2020-fintech-company-sezzle-reveals-new-logo-design-8.jpg"
@@ -47,6 +47,7 @@ const Calculator = () => {
       results.push(RPN.equation[RPN.equation.length - 1])
       sock(results)
       setCurrentOperator('')
+      count++
     } else {
       setCurrentDisplay((currentDisplay += target))
     }
@@ -106,7 +107,7 @@ const Calculator = () => {
           </tbody>
         </table>
       </form>
-      <Results results={results} setResults={setResults} />
+      <Results results={results} setResults={setResults} count={count} />
     </div>
   )
 }

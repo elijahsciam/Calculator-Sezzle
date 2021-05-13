@@ -15,7 +15,7 @@ const Results = (props) => {
     socket.on('equation', res => {
       props.setResults(res)
     })
-  })
+  }, [props.count])
   return (
     <div>
       <List component='results'>
