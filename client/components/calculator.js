@@ -3,6 +3,8 @@ import React, {useState, useEffect} from 'react'
 import RPNCalculator from './RPN'
 import Results from './results'
 import axios from 'axios'
+import io from 'socket.io-client'
+const socket = io(window.location.origin)
 const RPN = new RPNCalculator([])
 
 const Calculator = () => {
@@ -28,6 +30,10 @@ const Calculator = () => {
   async function set(equation) {
     await axios.post('/api/calculations', {equation: equation})
   }
+  const sock = (eq) => {
+    if (eq) socket.emit('new-equation', eq)
+  }
+
   const handleClick = (event) => {
     const target = event.target.value
     if (target === '+' || target === '-' || target === 'x' || target === '÷') {
@@ -39,6 +45,7 @@ const Calculator = () => {
       setCurrentDisplay(RPN[currentOperator]())
       set(RPN.equation[RPN.equation.length - 1])
       results.push(RPN.equation[RPN.equation.length - 1])
+      sock(results)
       setCurrentOperator('')
     } else {
       setCurrentDisplay((currentDisplay += target))
@@ -99,7 +106,7 @@ const Calculator = () => {
           </tbody>
         </table>
       </form>
-      <Results results={results} />
+      <Results results={results} setResults={setResults} />
     </div>
   )
 }
