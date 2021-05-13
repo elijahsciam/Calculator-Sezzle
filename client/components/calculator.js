@@ -48,6 +48,8 @@ const Calculator = () => {
       sock(results)
       setCurrentOperator('')
       count++
+    } else if (target === ':)') {
+      console.log('gotcha!')
     } else {
       setCurrentDisplay((currentDisplay += target))
     }

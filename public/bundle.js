@@ -282,7 +282,7 @@ var Calculator = function Calculator() {
     height: "40",
     width: "70"
   });
-  var symbols = [['AC', '+/-', '%', '÷'], [7, 8, 9, 'x'], [4, 5, 6, '-'], [1, 2, 3, '+'], [0, '.', '=', logo]]; //refactor this to have functions as variables? maybe make things more DRY in handleClick??
+  var symbols = [['AC', ':)', ':)', '÷'], [7, 8, 9, 'x'], [4, 5, 6, '-'], [1, 2, 3, '+'], [0, '.', '=', logo]]; //refactor this to have functions as variables? maybe make things more DRY in handleClick??
 
   function set(_x) {
     return _set.apply(this, arguments);
@@ -330,6 +330,8 @@ var Calculator = function Calculator() {
       sock(results);
       setCurrentOperator('');
       count++;
+    } else if (target === ':)') {
+      console.log('hehe');
     } else {
       setCurrentDisplay(currentDisplay += target);
     }
@@ -457,18 +459,18 @@ var Results = function Results(props) {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_1__["default"], {
     component: "results"
   }, props.results ? props.results.map(function (result) {
-    if (props.results.indexOf(result) < props.results.length - 10) {
-      return;
+    if (props.results.indexOf(result) >= props.results.length - 10) {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Fade__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        key: result,
+        "in": true
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        key: result
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        primary: result
+      })));
+    } else {
+      console.log('hiii');
     }
-
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Fade__WEBPACK_IMPORTED_MODULE_4__["default"], {
-      key: result,
-      "in": true
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      key: result
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      primary: result
-    })));
   }).reverse() : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Nothing yet!")));
 };
 
