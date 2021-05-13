@@ -1,9 +1,15 @@
 body {
-  font-family: sans-serif;
+  font-family: "Hoefler Text";
+  background-color:rgb(89,45,145);
 }
 
 a {
-  text-decoration: none;
+  color:white;
+}
+
+h1 {
+  font-style:italic;
+  color:lavender;
 }
 
 label {
@@ -24,7 +30,6 @@ form div {
   display: block;
   width: 100%;
   border: none;
-  background-color: #04aa6d;
   padding: 14px 28px;
   font-size: 16px;
   cursor: pointer;
@@ -32,9 +37,43 @@ form div {
 }
 
 #display {
-  background-color: rgb(201, 201, 201);
+  background-color: rgb(41,210,161);
+  color: black;
   padding: 15px;
   width: 300px;
   text-align: right;
   font-size: 20px;
+}
+
+.calc {
+  display: flex;
+  justify-content:center;
+}
+
+.MuiList-dense {
+  border-style: inset;
+  background-color: rgb(41,210,161);
+}
+
+#results{
+   margin-left:5cm;
+   margin-top: 0;
+   margin-bottom: 1cm;
+}
+
+#header {
+  text-align: center;
+}
+
+#calculator {
+  margin-top: 1.5cm;
+  background-color:rgb(255,249,237);
+}
+
+.welcome {
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  color: lavender;
+  border-style: inset;
 }

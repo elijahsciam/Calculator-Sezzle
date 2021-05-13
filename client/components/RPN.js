@@ -32,7 +32,7 @@ class RPNCalculator {
       return result
     });
   }
-  'x'() {
+  'X'() {
     return this.popCompute((first, second) => {
        const result = first * second
       this.equation.push(`${first} x ${second} = ${result}`)

@@ -18,7 +18,7 @@ const Results = (props) => {
   }, [props.count])
   return (
     <div>
-      <List component='results'>
+      <List component='ul' dense={true} className='listy'>
      {props.results ? props.results.map((result) => {
        if (props.results.indexOf(result) >= props.results.length - 10) {
        return <Fade key={result} in={true}><ListItem key={result}>

@@ -1,9 +1,12 @@
+/* eslint-disable complexity */
 import React, {useState, useEffect} from 'react'
 // import Display, {mathify} from './display'
 import RPNCalculator from './RPN'
 import Results from './results'
 import axios from 'axios'
 import io from 'socket.io-client'
+import Button from '@material-ui/core/Button'
+import Welcome from './welcome'
 const socket = io(window.location.origin)
 const RPN = new RPNCalculator([])
 
@@ -20,7 +23,7 @@ const Calculator = () => {
     />
   )
   const symbols = [
-    ['AC', ':)', ':)', '÷'],
+    ['AC', ':)', '(:', '÷'],
     [7, 8, 9, 'x'],
     [4, 5, 6, '-'],
     [1, 2, 3, '+'],
@@ -35,8 +38,8 @@ const Calculator = () => {
   }
 
   const handleClick = (event) => {
-    const target = event.target.value
-    if (target === '+' || target === '-' || target === 'x' || target === '÷') {
+    const target = event.target.innerText
+    if (target === '+' || target === '-' || target === 'X' || target === '÷') {
       RPN.push(Number(currentDisplay))
       setCurrentOperator(target)
       setCurrentDisplay('')
@@ -48,7 +51,7 @@ const Calculator = () => {
       sock(results)
       setCurrentOperator('')
       count++
-    } else if (target === ':)') {
+    } else if (target === ':)' || target === '(:') {
       console.log('gotcha!')
     } else {
       setCurrentDisplay((currentDisplay += target))
@@ -72,45 +75,59 @@ const Calculator = () => {
   }, [])
 
   return (
-    <div>
-      <form name="calculator">
-        <table border="5">
-          <tbody>
-            <tr>
-              <td colSpan="5">
-                <input
-                  type="text"
-                  name="display"
-                  id="display"
-                  value={currentDisplay}
-                />
-              </td>
-            </tr>
-            {symbols.map((array) => {
-              const row = array.map((symbol) => {
-                if (symbol === logo) {
-                  return <td key="logo">{symbol}</td>
-                }
-                return (
-                  <td key={symbol}>
+    <body>
+      <div id="header">
+        <h1>Elijah Sciammas Calculator</h1>
+      </div>
+      <div className="calc">
+        <form name="calculator">
+          <div id="calculator">
+            <table border="5">
+              <tbody>
+                <tr>
+                  <td colSpan="5">
                     <input
-                      type="button"
-                      className="block"
-                      value={symbol}
-                      onClick={() => {
-                        handleClick(event)
-                      }}
+                      type="text"
+                      name="display"
+                      id="display"
+                      value={currentDisplay}
+                      disabled
                     />
                   </td>
-                )
-              })
-              return <tr key={array}>{row}</tr>
-            })}
-          </tbody>
-        </table>
-      </form>
-      <Results results={results} setResults={setResults} count={count} />
-    </div>
+                </tr>
+                {symbols.map((array) => {
+                  const row = array.map((symbol) => {
+                    if (symbol === logo) {
+                      return <td key="logo">{symbol}</td>
+                    }
+                    return (
+                      <td key={symbol}>
+                        <Button
+                          color="primary"
+                          variant="contained"
+                          className="block"
+                          onClick={() => {
+                            handleClick(event)
+                          }}
+                        >
+                          {symbol}
+                        </Button>
+                      </td>
+                    )
+                  })
+                  return <tr key={array}>{row}</tr>
+                })}
+              </tbody>
+            </table>
+          </div>
+        </form>
+        <div id="results">
+          <h4 style={{color: 'lavender'}}>Calculations</h4>
+          <Results results={results} setResults={setResults} count={count} />
+        </div>
+      </div>
+      <Welcome />
+    </body>
   )
 }
 
