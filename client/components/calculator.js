@@ -88,8 +88,8 @@ const Calculator = () => {
       const data = getter.data.map((val) => {
         return val.equation
       })
-      setCalculations((calculations = reverseMap(data)))
-      setResults((results = reverseMap(data)))
+      setCalculations((calculations = data))
+      setResults((results = data))
     }
     fetch()
   }, [])
