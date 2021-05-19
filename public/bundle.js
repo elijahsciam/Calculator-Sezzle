@@ -540,9 +540,14 @@ var Results = function Results(props) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var chinese_english_dictionary__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! chinese-english-dictionary */ "./node_modules/chinese-english-dictionary/dictionary.js");
+/* harmony import */ var chinese_english_dictionary__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(chinese_english_dictionary__WEBPACK_IMPORTED_MODULE_1__);
 
+
+var dictionary = new chinese_english_dictionary__WEBPACK_IMPORTED_MODULE_1___default.a();
 
 var Welcome = function Welcome() {
+  console.log(dictionary.find('bread'));
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "welcome"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Welcome to my app!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Calculations are updated real time for users everywhere."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Check out the ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
@@ -13145,6 +13150,119 @@ var toString = {}.toString;
 module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
+
+
+/***/ }),
+
+/***/ "./node_modules/chinese-english-dictionary/dict/parser.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/chinese-english-dictionary/dict/parser.js ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* eslint-disable camelcase */
+/* eslint-disable no-unused-vars */
+
+const parseData = data => {
+  let dict = {simplified: {}, traditional: {}}
+  const lines = data.split('\n')
+  const chars_pinyin_english = lines.map(line => {
+    return line.split('/')
+  })
+  const english = chars_pinyin_english.map(word => {
+    return word[1]
+  })
+  const char_pinyin = chars_pinyin_english.map(word => {
+    return word[0]
+  })
+  const pinyin = char_pinyin.map(char => {
+    let array = char.split('[')
+    return array[1]
+  })
+  const simplifiedChar = char_pinyin.map(char => {
+    let array = char.split(' ')
+    return array[1]
+  })
+  const traditionalChar = char_pinyin.map(char => {
+    let array = char.split(' ')
+
+    return array[0]
+  })
+  for (const sChar in simplifiedChar) {
+    if (sChar) {
+      dict.simplified[simplifiedChar[sChar]] = {
+        pinyin: pinyin[sChar],
+        english: english[sChar]
+      }
+    }
+  }
+  for (const tChar in traditionalChar) {
+    if (tChar) {
+      dict.traditional[traditionalChar[tChar]] = {english: english[tChar]}
+    }
+  }
+  return dict
+}
+
+module.exports = parseData
+
+
+/***/ }),
+
+/***/ "./node_modules/chinese-english-dictionary/dictionary.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/chinese-english-dictionary/dictionary.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* eslint-disable camelcase */
+/* eslint-disable no-unused-vars */
+const fs = __webpack_require__(/*! fs */ 2);
+const parseData = __webpack_require__(/*! ./dict/parser */ "./node_modules/chinese-english-dictionary/dict/parser.js");
+
+const REGEX_CHINESE = /[\u4e00-\u9fff]|[\u3400-\u4dbf]|[\u{20000}-\u{2a6df}]|[\u{2a700}-\u{2b73f}]|[\u{2b740}-\u{2b81f}]|[\u{2b820}-\u{2ceaf}]|[\uf900-\ufaff]|[\u3300-\u33ff]|[\ufe30-\ufe4f]|[\uf900-\ufaff]|[\u{2f800}-\u{2fa1f}]/u;
+const isChinese = (str) => REGEX_CHINESE.test(str);
+
+const buildRequest = (word, style, language) => {
+  let dict = fs.readFileSync('dict/cedict_ts.u8', 'utf8', (err, data) => {
+    if (err) throw err;
+  });
+
+  const dictionary = parseData(dict);
+  if (language === 'chinese') {
+    if (style === 'simplified') {
+      const pinyin = dictionary[style][word].pinyin.split(']');
+      const english = dictionary[style][word].english;
+      return { pinyin: pinyin[0].toString(), english };
+    } else {
+      const english = dictionary[style][word].english;
+      return { english: english };
+    }
+  }
+  // else --> how can I search for english? May need to add an english property in the parser
+};
+
+const ChineseDictionary = function (obj) {
+  this.config = {
+    char_type: obj.char_type || 'simplified',
+  };
+};
+
+ChineseDictionary.prototype.find = function (word) {
+  if (isChinese(word)) {
+    return buildRequest(word, this.config.char_type, 'chinese');
+  } else {
+    return buildRequest(word, this.config.char_type, 'english');
+  }
+};
+
+const hi = new ChineseDictionary({ char_type: 'traditional' });
+
+console.log(hi.find('龍燈'));
+
+module.exports = ChineseDictionary;
 
 
 /***/ }),
@@ -61480,6 +61598,17 @@ module.exports = __webpack_require__(/*! ./client/index.js */"./client/index.js"
 /***/ 1:
 /*!********************!*\
   !*** ws (ignored) ***!
+  \********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ 2:
+/*!********************!*\
+  !*** fs (ignored) ***!
   \********************/
 /*! no static exports found */
 /***/ (function(module, exports) {

@@ -10,21 +10,16 @@ const socket = io(window.location.origin)
 
 
 
-const Results = (props) => {
+const Calculations = (props) => {
 
   useEffect(() => {
     socket.on('update-results', res => {
       if (res.length > 10) {
         res = res.slice(res.length - 10, res.length - 1)
       }
-      console.log(res)
       props.setCalculations(res)
     })
   }, [props.count])
-
-  // if (props.results) {
-  //   var reversedResults = reverseMap(props.results)
-  // }
 
   return (
     <div>
@@ -41,4 +36,4 @@ const Results = (props) => {
 }
 
 
-export default Results
+export default Calculations

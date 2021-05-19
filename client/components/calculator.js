@@ -2,7 +2,7 @@
 import React, {useState, useEffect} from 'react'
 // import Display, {mathify} from './display'
 import RPNCalculator from './RPN'
-import Results from './results'
+import Calculations from './calculations'
 import axios from 'axios'
 import io from 'socket.io-client'
 import Button from '@material-ui/core/Button'
@@ -11,6 +11,7 @@ const socket = io(window.location.origin)
 const RPN = new RPNCalculator([])
 
 const Calculator = () => {
+  //helper variables
   let [currentDisplay, setCurrentDisplay] = useState('')
   let [currentOperator, setCurrentOperator] = useState()
   let [results, setResults] = useState()
@@ -31,6 +32,7 @@ const Calculator = () => {
     [0, '.', '=', logo],
   ]
 
+  //helper functions
   async function set(equation) {
     await axios.post('/api/calculations', {equation: equation})
   }
@@ -143,7 +145,7 @@ const Calculator = () => {
         </form>
         <div id="results">
           <h4 style={{color: 'lavender'}}>Calculations</h4>
-          <Results
+          <Calculations
             calculations={calculations}
             setCalculations={setCalculations}
             count={count}
