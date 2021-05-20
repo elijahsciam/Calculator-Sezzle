@@ -222,6 +222,63 @@ function () {
 
 /***/ }),
 
+/***/ "./client/components/calculations.js":
+/*!*******************************************!*\
+  !*** ./client/components/calculations.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _material_ui_core_List__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/List */ "./node_modules/@material-ui/core/esm/List/index.js");
+/* harmony import */ var _material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/ListItem */ "./node_modules/@material-ui/core/esm/ListItem/index.js");
+/* harmony import */ var _material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/ListItemText */ "./node_modules/@material-ui/core/esm/ListItemText/index.js");
+/* harmony import */ var _material_ui_core_Fade__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/Fade */ "./node_modules/@material-ui/core/esm/Fade/index.js");
+/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js");
+/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_5__);
+//useEffect database query to get last 10 calculations
+// //passing results as props to display
+
+
+
+
+
+
+var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_5___default()(window.location.origin);
+
+var Calculations = function Calculations(props) {
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    socket.on('update-results', function (res) {
+      if (res.length > 10) {
+        res = res.slice(res.length - 10, res.length);
+      }
+
+      props.setCalculations(res);
+    });
+  }, [props.count]);
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    component: "ul",
+    dense: true,
+    className: "listy"
+  }, props.calculations ? props.calculations.map(function (result) {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Fade__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      key: result,
+      "in": true
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      key: result
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      primary: result
+    })));
+  }).reverse() : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Nothing yet!")));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Calculations);
+
+/***/ }),
+
 /***/ "./client/components/calculator.js":
 /*!*****************************************!*\
   !*** ./client/components/calculator.js ***!
@@ -234,7 +291,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _RPN__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RPN */ "./client/components/RPN.js");
-/* harmony import */ var _results__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./results */ "./client/components/results.js");
+/* harmony import */ var _calculations__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./calculations */ "./client/components/calculations.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js");
@@ -266,6 +323,7 @@ var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_4___default()(window.loca
 var RPN = new _RPN__WEBPACK_IMPORTED_MODULE_1__["default"]([]);
 
 var Calculator = function Calculator() {
+  //helper variables
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
       _useState2 = _slicedToArray(_useState, 2),
       currentDisplay = _useState2[0],
@@ -292,7 +350,7 @@ var Calculator = function Calculator() {
     height: "40",
     width: "70"
   });
-  var symbols = [['AC', ':)', '(:', '÷'], [7, 8, 9, 'x'], [4, 5, 6, '-'], [1, 2, 3, '+'], [0, '.', '=', logo]];
+  var symbols = [['AC', ':)', '(:', '÷'], [7, 8, 9, 'x'], [4, 5, 6, '-'], [1, 2, 3, '+'], [0, '.', '=', logo]]; //helper functions
 
   function set(_x) {
     return _set.apply(this, arguments);
@@ -395,10 +453,15 @@ var Calculator = function Calculator() {
                 data = getter.data.map(function (val) {
                   return val.equation;
                 });
+
+                if (data.length > 10) {
+                  data = data.slice(data.length - 10, data.length);
+                }
+
                 setCalculations(calculations = data);
                 setResults(results = data);
 
-              case 6:
+              case 7:
               case "end":
                 return _context.stop();
             }
@@ -456,7 +519,7 @@ var Calculator = function Calculator() {
     style: {
       color: 'lavender'
     }
-  }, "Calculations"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_results__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, "Calculations"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_calculations__WEBPACK_IMPORTED_MODULE_2__["default"], {
     calculations: calculations,
     setCalculations: setCalculations,
     count: count,
@@ -465,67 +528,6 @@ var Calculator = function Calculator() {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Calculator);
-
-/***/ }),
-
-/***/ "./client/components/results.js":
-/*!**************************************!*\
-  !*** ./client/components/results.js ***!
-  \**************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _material_ui_core_List__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/List */ "./node_modules/@material-ui/core/esm/List/index.js");
-/* harmony import */ var _material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/ListItem */ "./node_modules/@material-ui/core/esm/ListItem/index.js");
-/* harmony import */ var _material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/ListItemText */ "./node_modules/@material-ui/core/esm/ListItemText/index.js");
-/* harmony import */ var _material_ui_core_Fade__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/Fade */ "./node_modules/@material-ui/core/esm/Fade/index.js");
-/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js");
-/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_5__);
-//useEffect database query to get last 10 calculations
-// //passing results as props to display
-
-
-
-
-
-
-var socket = socket_io_client__WEBPACK_IMPORTED_MODULE_5___default()(window.location.origin);
-
-var Results = function Results(props) {
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    socket.on('update-results', function (res) {
-      if (res.length > 10) {
-        res = res.slice(res.length - 10, res.length - 1);
-      }
-
-      console.log(res);
-      props.setCalculations(res);
-    });
-  }, [props.count]); // if (props.results) {
-  //   var reversedResults = reverseMap(props.results)
-  // }
-
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    component: "ul",
-    dense: true,
-    className: "listy"
-  }, props.calculations ? props.calculations.map(function (result) {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Fade__WEBPACK_IMPORTED_MODULE_4__["default"], {
-      key: result,
-      "in": true
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      key: result
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      primary: result
-    })));
-  }).reverse() : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Nothing yet!")));
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (Results);
 
 /***/ }),
 
@@ -540,14 +542,9 @@ var Results = function Results(props) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var chinese_english_dictionary__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! chinese-english-dictionary */ "./node_modules/chinese-english-dictionary/dictionary.js");
-/* harmony import */ var chinese_english_dictionary__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(chinese_english_dictionary__WEBPACK_IMPORTED_MODULE_1__);
 
-
-var dictionary = new chinese_english_dictionary__WEBPACK_IMPORTED_MODULE_1___default.a();
 
 var Welcome = function Welcome() {
-  console.log(dictionary.find('bread'));
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "welcome"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Welcome to my app!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Calculations are updated real time for users everywhere."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Check out the ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
@@ -7914,7 +7911,7 @@ var grid = Object(_compose__WEBPACK_IMPORTED_MODULE_1__["default"])(gridGap, gri
 /*!*******************************************************!*\
   !*** ./node_modules/@material-ui/system/esm/index.js ***!
   \*******************************************************/
-/*! exports provided: borders, breakpoints, compose, css, display, flexbox, grid, palette, positions, shadows, sizing, spacing, style, typography, border, borderTop, borderRight, borderBottom, borderLeft, borderColor, borderRadius, flexBasis, flexDirection, flexWrap, justifyContent, alignItems, alignContent, order, flex, flexGrow, flexShrink, alignSelf, justifyItems, justifySelf, gridGap, gridColumnGap, gridRowGap, gridColumn, gridRow, gridAutoFlow, gridAutoColumns, gridAutoRows, gridTemplateColumns, gridTemplateRows, gridTemplateAreas, gridArea, color, bgcolor, position, zIndex, top, right, bottom, left, width, maxWidth, minWidth, height, maxHeight, minHeight, sizeWidth, sizeHeight, boxSizing, createUnarySpacing, fontFamily, fontSize, fontStyle, fontWeight, letterSpacing, lineHeight, textAlign */
+/*! exports provided: borders, border, borderTop, borderRight, borderBottom, borderLeft, borderColor, borderRadius, breakpoints, compose, css, display, flexbox, flexBasis, flexDirection, flexWrap, justifyContent, alignItems, alignContent, order, flex, flexGrow, flexShrink, alignSelf, justifyItems, justifySelf, grid, gridGap, gridColumnGap, gridRowGap, gridColumn, gridRow, gridAutoFlow, gridAutoColumns, gridAutoRows, gridTemplateColumns, gridTemplateRows, gridTemplateAreas, gridArea, palette, color, bgcolor, positions, position, zIndex, top, right, bottom, left, shadows, sizing, width, maxWidth, minWidth, height, maxHeight, minHeight, sizeWidth, sizeHeight, boxSizing, spacing, createUnarySpacing, style, typography, fontFamily, fontSize, fontStyle, fontWeight, letterSpacing, lineHeight, textAlign */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13150,119 +13147,6 @@ var toString = {}.toString;
 module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
-
-
-/***/ }),
-
-/***/ "./node_modules/chinese-english-dictionary/dict/parser.js":
-/*!****************************************************************!*\
-  !*** ./node_modules/chinese-english-dictionary/dict/parser.js ***!
-  \****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/* eslint-disable camelcase */
-/* eslint-disable no-unused-vars */
-
-const parseData = data => {
-  let dict = {simplified: {}, traditional: {}}
-  const lines = data.split('\n')
-  const chars_pinyin_english = lines.map(line => {
-    return line.split('/')
-  })
-  const english = chars_pinyin_english.map(word => {
-    return word[1]
-  })
-  const char_pinyin = chars_pinyin_english.map(word => {
-    return word[0]
-  })
-  const pinyin = char_pinyin.map(char => {
-    let array = char.split('[')
-    return array[1]
-  })
-  const simplifiedChar = char_pinyin.map(char => {
-    let array = char.split(' ')
-    return array[1]
-  })
-  const traditionalChar = char_pinyin.map(char => {
-    let array = char.split(' ')
-
-    return array[0]
-  })
-  for (const sChar in simplifiedChar) {
-    if (sChar) {
-      dict.simplified[simplifiedChar[sChar]] = {
-        pinyin: pinyin[sChar],
-        english: english[sChar]
-      }
-    }
-  }
-  for (const tChar in traditionalChar) {
-    if (tChar) {
-      dict.traditional[traditionalChar[tChar]] = {english: english[tChar]}
-    }
-  }
-  return dict
-}
-
-module.exports = parseData
-
-
-/***/ }),
-
-/***/ "./node_modules/chinese-english-dictionary/dictionary.js":
-/*!***************************************************************!*\
-  !*** ./node_modules/chinese-english-dictionary/dictionary.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* eslint-disable camelcase */
-/* eslint-disable no-unused-vars */
-const fs = __webpack_require__(/*! fs */ 2);
-const parseData = __webpack_require__(/*! ./dict/parser */ "./node_modules/chinese-english-dictionary/dict/parser.js");
-
-const REGEX_CHINESE = /[\u4e00-\u9fff]|[\u3400-\u4dbf]|[\u{20000}-\u{2a6df}]|[\u{2a700}-\u{2b73f}]|[\u{2b740}-\u{2b81f}]|[\u{2b820}-\u{2ceaf}]|[\uf900-\ufaff]|[\u3300-\u33ff]|[\ufe30-\ufe4f]|[\uf900-\ufaff]|[\u{2f800}-\u{2fa1f}]/u;
-const isChinese = (str) => REGEX_CHINESE.test(str);
-
-const buildRequest = (word, style, language) => {
-  let dict = fs.readFileSync('dict/cedict_ts.u8', 'utf8', (err, data) => {
-    if (err) throw err;
-  });
-
-  const dictionary = parseData(dict);
-  if (language === 'chinese') {
-    if (style === 'simplified') {
-      const pinyin = dictionary[style][word].pinyin.split(']');
-      const english = dictionary[style][word].english;
-      return { pinyin: pinyin[0].toString(), english };
-    } else {
-      const english = dictionary[style][word].english;
-      return { english: english };
-    }
-  }
-  // else --> how can I search for english? May need to add an english property in the parser
-};
-
-const ChineseDictionary = function (obj) {
-  this.config = {
-    char_type: obj.char_type || 'simplified',
-  };
-};
-
-ChineseDictionary.prototype.find = function (word) {
-  if (isChinese(word)) {
-    return buildRequest(word, this.config.char_type, 'chinese');
-  } else {
-    return buildRequest(word, this.config.char_type, 'english');
-  }
-};
-
-const hi = new ChineseDictionary({ char_type: 'traditional' });
-
-console.log(hi.find('龍燈'));
-
-module.exports = ChineseDictionary;
 
 
 /***/ }),
@@ -61598,17 +61482,6 @@ module.exports = __webpack_require__(/*! ./client/index.js */"./client/index.js"
 /***/ 1:
 /*!********************!*\
   !*** ws (ignored) ***!
-  \********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/* (ignored) */
-
-/***/ }),
-
-/***/ 2:
-/*!********************!*\
-  !*** fs (ignored) ***!
   \********************/
 /*! no static exports found */
 /***/ (function(module, exports) {

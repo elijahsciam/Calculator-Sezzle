@@ -87,9 +87,12 @@ const Calculator = () => {
   useEffect(() => {
     async function fetch() {
       const getter = await axios.get('/api/calculations')
-      const data = getter.data.map((val) => {
+      let data = getter.data.map((val) => {
         return val.equation
       })
+      if (data.length > 10) {
+        data = data.slice(data.length - 10, data.length)
+      }
       setCalculations((calculations = data))
       setResults((results = data))
     }

@@ -15,7 +15,7 @@ const Calculations = (props) => {
   useEffect(() => {
     socket.on('update-results', res => {
       if (res.length > 10) {
-        res = res.slice(res.length - 10, res.length - 1)
+        res = res.slice(res.length - 10, res.length)
       }
       props.setCalculations(res)
     })
